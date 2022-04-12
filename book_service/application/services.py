@@ -146,9 +146,9 @@ class BookService:
                     result['tag'] = param
                     # print(result['isbn10'], type(result['isbn10']))
                     books.append(result)
-                    book_info = BookInfo(**result)
-                    print(book_info)
-                    self.publisher.publish(Message("Exchange", {'data': book_info.dict()}))
+                    # book_info = BookInfo(**result)
+                    # print(book_info)
+                    self.publisher.publish(Message("Exchange", {'data': result}))
 
                 # GET LAST DB UPDATE WHERE LAST DATE + HIGH RATING --> SEND TO RABBIT FOR EMAIL
                 print(books)

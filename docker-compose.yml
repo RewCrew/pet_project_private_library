@@ -55,6 +55,8 @@ services:
       - postgresdb
       - rabbitmq
     restart: unless-stopped
+
+
   books_service_consumer:
     build: ./book_service
     #    ports:
