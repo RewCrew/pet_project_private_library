@@ -27,7 +27,6 @@ class DB:
 class PublisherMessageBus:
     connection = Connection(Settings.message_bus.BROKER_URL)
     message_bus.broker_scheme.declare(connection)
-    # consumer = message_bus.create_consumer(connection, Application.book_controller)
 
     publisher = KombuPublisher(
         connection=connection,

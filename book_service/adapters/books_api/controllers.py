@@ -36,6 +36,7 @@ class BooksController:
         request.media['user_id'] = request.context.client.user_id
 
         self.book_controller.take_book(**request.media)
+
         response.media = {'message': 'book taken by you'}
 
     @authenticate
@@ -50,10 +51,46 @@ class BooksController:
         books = self.book_controller.get_all()
         response.media = {'library': [{
             'book id': book.book_id,
-            'title': book.book_title,
-            'author': book.author_name,
-            'current owner': book.user_id
+            'title': book.title,
+            'authors': book.authors,
+            'subtitle': book.subtitle,
+            'publisher': book.publisher,
+            'isbn13': book.isbn13,
+            'pages': book.pages,
+            'year': book.year,
+            'rating': book.rating,
+            'desc': book.desc,
+            'price': book.price,
+            'image': book.image,
+            'url': book.url,
+            'isbn10': book.isbn10,
+            'prebooked_by_user_id': book.prebooked_by_user_id,
+            'finally_booked_by_user_id': book.finally_booked_by_user_id
         } for book in books]}
+
+    @join_point
+    def on_get_get_book(self, request: Request, response: Response):
+        isbn=request.get_param('isbn')
+        book = self.book_controller.get_book(int(isbn))
+        response.media = {'library': {
+            'book id': book.book_id,
+            'title': book.title,
+            'authors': book.authors,
+            'subtitle': book.subtitle,
+            'publisher': book.publisher,
+            'isbn13': book.isbn13,
+            'pages': book.pages,
+            'year': book.year,
+            'rating': book.rating,
+            'desc': book.desc,
+            'price': book.price,
+            'image': book.image,
+            'url': book.url,
+            'isbn10': book.isbn10,
+            'prebooked_by_user_id': book.prebooked_by_user_id,
+            'finally_booked_by_user_id': book.finally_booked_by_user_id
+        } }
+
 
     @authenticate
     @join_point
@@ -62,16 +99,31 @@ class BooksController:
         books = self.book_controller.get_user_books(user_id)
         response.media = {f'user {request.context.client.user_id} books': [{
             'book id': book.book_id,
-            'title': book.book_title,
-            'author': book.author_name,
-            'current owner': book.user_id
+            'title': book.title,
+            'authors': book.authors,
+            'subtitle': book.subtitle,
+            'publisher': book.publisher,
+            'isbn13': book.isbn13,
+            'pages': book.pages,
+            'year': book.year,
+            'rating': book.rating,
+            'desc': book.desc,
+            'price': book.price,
+            'image': book.image,
+            'url': book.url,
+            'isbn10': book.isbn10,
         } for book in books]}
 
+
+    @authenticate
     @join_point
-    def on_get_get_free_books(self, request: Request, response: Response):
-        books = self.book_controller.get_free_books()
-        response.media = {f'user {request.context.client.user_id} books': [{
-            'book id': book.book_id,
-            'title': book.book_title,
-            'author': book.author_name
-        } for book in books]}
+    def on_post_prebook_book(self, request: Request, response: Response):
+        request.media['user_id'] = request.context.client.user_id
+        self.book_controller.prebook_book(**request.media)
+
+    @authenticate
+    @join_point
+    def on_post_buy_book(self, request: Request, response: Response):
+        request.media['user_id'] = request.context.client.user_id
+        self.book_controller.buy_book(**request.media)
+

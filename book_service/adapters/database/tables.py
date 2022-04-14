@@ -4,7 +4,9 @@ from sqlalchemy import (
     BigInteger,
     MetaData,
     String,
-    Table)
+    Table,
+    DateTime,
+    Boolean)
 
 naming_convention = {
     'ix': 'ix_%(column_0_label)s',
@@ -33,8 +35,20 @@ books = Table(
     Column('price', String, nullable=False),
     Column('image', String, nullable=False),
     Column('url', String, nullable=False),
-    # Column('pdf', String, nullable=False),
     Column('desc', String, nullable=False),
     Column('prebooked_by_user_id', Integer, nullable=True),
     Column('finally_booked_by_user_id', Integer, nullable=True)
 )
+
+
+userbooks = Table(
+    'userbooks',
+    metadata,
+    Column('id', Integer, primary_key=True, autoincrement=True),
+    Column('book_isbn', BigInteger, nullable=False),
+    Column('user_id', Integer, nullable=False),
+    Column('booked_date', DateTime, nullable=False),
+    Column('order_for_days', Integer, nullable=False),
+    Column('return_date', DateTime, nullable=True),
+    Column('booked_forever', Boolean, default=False))
+

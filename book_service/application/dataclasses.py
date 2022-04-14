@@ -22,4 +22,3 @@ class Book:
     prebooked_by_user_id : Optional[int]=None
     finally_booked_by_user_id: Optional[int] = None
     book_id: Optional[int] = None
-    tag: Optional[str] = None

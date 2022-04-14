@@ -37,6 +37,10 @@ class UsersRepo(BaseRepository, interfaces.UsersRepo):
         self.session.execute(query)
         self.session.flush()
 
+    def get_all(self):
+        users = self.session.query(User).order_by(User.id).all()
+        return users
+
     # def update(self, user: UserUpdate):
     #     user_query = self.session.query(User).filter_by(user_id=user.id).one_or_none()
     #     if not user_query:

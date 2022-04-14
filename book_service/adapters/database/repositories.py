@@ -22,11 +22,15 @@ class BooksRepo(BaseRepository, interfaces.BooksRepo):
         query = select(Book).where(Book.book_id == id_)
         return self.session.execute(query).scalars().one_or_none()
 
+    def get_by_isbn(self, isbn: int) -> Optional[Book]:
+        query = select(Book).where(Book.isbn13 == isbn)
+        return self.session.execute(query).scalars().one_or_none()
+
     def get_or_create(self, book: Book) -> Book:
-        if book.book_id is None:
+        if book.isbn13 is None:
             self.add(book)
         else:
-            new_book = self.get_by_id(book.book_id)
+            new_book = self.get_by_isbn(book.isbn13)
             if new_book is None:
                 self.add(book)
             else:
@@ -80,15 +84,32 @@ class BooksRepo(BaseRepository, interfaces.BooksRepo):
         return books
 
     def get_user_books(self, user_id: int):
-        selected_books = self.session.query(Book).where(Book.user_id == user_id).all()
+        selected_books = self.session.query(Book).where(Book.prebooked_by_user_id == user_id).all()
         return selected_books
 
     def get_free_books(self):
         selected_books = self.session.query(Book).where(Book.user_id is None).order_by(Book.book_id).all()
         return selected_books
     
-    def buy_book(self, book_id, user_id):
-        pass
+    def buy_book(self, book_isbn, user_id):
+        book = self.get_by_isbn(book_isbn)
+        if book is None:
+            raise errors.NoBook(message='no book exist')
+        else:
+            if book.prebooked_by_user_id == user_id:
+                book.prebooked_by_user_id = None
+                book.finally_booked_by_user_id = user_id
+                return book
+            else:
+                raise errors.NoBook(message='book not prebooked by you')
 
-    def prebook_book(selfself, book_id, user_id):
-        pass
+    def prebook_book(self, book_isbn, user_id):
+        book = self.get_by_isbn(book_isbn)
+        if book is None:
+            raise errors.NoBook(message='no book exist')
+        else:
+            if book.prebooked_by_user_id is not None or book.finally_booked_by_user_id is not None:
+                raise errors.NoBook(message='Book ordered or bought by someone else')
+            else:
+                book.prebooked_by_user_id = user_id
+                return book

@@ -17,6 +17,9 @@ WORKDIR /app
 
 RUN pip install --no-cache-dir --upgrade -e '.[dev]'
 
+COPY ./entrypoint_*.sh /usr/bin/
+
+RUN chmod +x /usr/bin/entrypoint_*.sh
 
 COPY . ./user_service
 

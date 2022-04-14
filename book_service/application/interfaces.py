@@ -16,15 +16,19 @@ class BooksRepo(ABC):
         pass
 
     @abstractmethod
+    def get_by_isbn(self, isbn:int):
+        pass
+
+    @abstractmethod
     def delete(self, book_id: int):
         pass
 
     @abstractmethod
-    def prebook_book(self, book_id: int, user_id: int):
+    def prebook_book(self, book_isbn: int, user_id: int):
         pass
 
     @abstractmethod
-    def buy_book(self, book_id: int, user_id: int):
+    def buy_book(self, book_isbn: int, user_id: int):
         pass
 
     @abstractmethod

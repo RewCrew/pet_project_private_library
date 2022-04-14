@@ -1,3 +1,4 @@
+import sys
 from typing import Optional
 
 import jwt
@@ -10,6 +11,21 @@ from evraz.classic.components import component
 from user_service.application import interfaces, errors
 from user_service.application.dataclasses import User
 from evraz.classic.messaging import Message
+
+
+import logging
+import sys
+
+root = logging.getLogger()
+root.setLevel(logging.INFO)
+
+handler = logging.StreamHandler(sys.stdout)
+handler.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+root.addHandler(handler)
+
+
 
 join_points = PointCut()
 join_point = join_points.join_point
@@ -69,3 +85,13 @@ class UsersService:
             raise errors.NoUser(message="No user exist")
         else:
             return user
+
+    @join_point
+    def message_sender(self, data:dict):
+        print(data, file=sys.stderr)
+        # data = list(data.values())[0]
+        root.info(data)
+        users = self.user_repo.get_all()
+        root.info(users)
+        for user in users:
+            root.info(f"attention user {user.name}, new books {data} arrived")

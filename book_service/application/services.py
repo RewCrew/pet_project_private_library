@@ -29,7 +29,6 @@ class BookInfo(DTO):
     price: str
     image: str
     url: str
-    tag: str
     isbn10: Optional[str] = None
     prebooked_by_user_id: Optional[int] = None
     finally_booked_by_user_id: Optional[int] = None
@@ -118,17 +117,29 @@ class BookService:
         return books
 
     @join_point
-    def get_book(self, book_id: int):
-        book = self.books_repo.get_by_id(book_id)
-        if book is None or book_id != book.book_id:
+    def get_book(self, book_isbn: int):
+        book = self.books_repo.get_by_isbn(book_isbn)
+        if book is None or book_isbn != book.isbn13:
             raise errors.NoBook(message="No book exist")
         else:
             return book
 
     @join_point
+    def buy_book(self, book_isbn:int, user_id:int):
+        book = self.books_repo.buy_book(book_isbn, user_id)
+        return book
+
+    @join_point
+    def prebook_book(self, book_isbn: int, user_id: int):
+        book = self.books_repo.prebook_book(book_isbn, user_id)
+        return book
+
+
+    @join_point
     def get_books_from_api(self, params:list):
-        books = []
+        books = {}
         for param in params:
+            books[param]=[]
             for i in range(1,6):
                 response = requests.get(f"https://api.itbook.store/1.0/search/{param}/{i}")
                 result = response.content.decode("utf8")
@@ -143,16 +154,20 @@ class BookService:
                     response = requests.get(f"https://api.itbook.store/1.0/books/{book['isbn13']}")
                     result = response.content.decode("utf-8")
                     result = json.loads(result)
-                    result['tag'] = param
+                    # result['tag'] = param
                     # print(result['isbn10'], type(result['isbn10']))
-                    books.append(result)
+                    books[param].append(result)
                     # book_info = BookInfo(**result)
                     # print(book_info)
                     self.publisher.publish(Message("Exchange", {'data': result}))
+                    print(result)
 
                 # GET LAST DB UPDATE WHERE LAST DATE + HIGH RATING --> SEND TO RABBIT FOR EMAIL
-                print(books)
-        print(len(books))
+        for k, v in books.items():
+            filter = sorted(v, key=lambda x: (-int(x['rating']), x['year']))
+            books[k] = filter[:3]
+
+        self.publisher.publish(Message("BookExchange", {"data": books}))
         return books
 #
 # class BookUpdateServices()
@@ -167,5 +182,5 @@ class BookService:
 #     def buy_book(self, book_id, user_id):
 #         pass
 #
-#     def prebook_book(selfself, book_id, user_id):
+#     def prebook_book(self, book_id, user_id):
 #         pass

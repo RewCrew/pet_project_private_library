@@ -32,7 +32,8 @@ services:
     depends_on:
       - postgresdb
       - rabbitmq
-  #    restart: unless-stopped
+    restart: unless-stopped
+
 
   books_service:
     build: ./book_service
@@ -55,6 +56,30 @@ services:
       - postgresdb
       - rabbitmq
     restart: unless-stopped
+
+
+
+  users_service_consumer:
+    build: ./user_service
+
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_USER: superuser
+      RABBITMQ_PASS: password
+      RABBITMQ_PORT: 5672
+      HOST: postgresdb
+      USER: postgres
+      PASSWORD: password
+      DATABASE: evraz_project
+    volumes:
+      - ./user_service:/app/user_service
+    depends_on:
+      - postgresdb
+      - rabbitmq
+    restart: on-failure
+    command:
+      "entrypoint_consumer.sh"
+
 
 
   books_service_consumer:

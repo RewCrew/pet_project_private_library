@@ -1,13 +1,15 @@
+from kombu import Connection
 from sqlalchemy import create_engine
 
 from evraz.classic.sql_storage import TransactionContext
 
-from user_service.adapters import database, users_api
+from user_service.adapters import database, users_api, message_bus
 from user_service.application import services
 
 class Settings:
     db = database.Settings()
     chat_api = users_api.Settings()
+    message_bus = message_bus.Settings()
 
 
 class DB:
@@ -24,6 +26,13 @@ class Application:
     register = services.UsersService(user_repo=DB.users_repo)
     is_dev_mode = Settings.chat_api.IS_DEV_MODE
 
+class ConsumerMessageBus:
+    connection = Connection(Settings.message_bus.BROKER_URL)
+    consumer = message_bus.create_consumer(connection, Application.register)
+
+    @staticmethod
+    def declare_scheme():
+        message_bus.broker_scheme.declare(ConsumerMessageBus.connection)
 
 class Aspects:
     services.join_points.join(DB.context)
