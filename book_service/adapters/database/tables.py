@@ -5,8 +5,8 @@ from sqlalchemy import (
     MetaData,
     String,
     Table,
-    DateTime,
-    Boolean)
+    Boolean,
+    Date)
 
 naming_convention = {
     'ix': 'ix_%(column_0_label)s',
@@ -35,9 +35,8 @@ books = Table(
     Column('price', String, nullable=False),
     Column('image', String, nullable=False),
     Column('url', String, nullable=False),
-    Column('desc', String, nullable=False),
-    Column('prebooked_by_user_id', Integer, nullable=True),
-    Column('finally_booked_by_user_id', Integer, nullable=True)
+    Column('desc', String, nullable=False)
+
 )
 
 
@@ -46,9 +45,12 @@ userbooks = Table(
     metadata,
     Column('id', Integer, primary_key=True, autoincrement=True),
     Column('book_isbn', BigInteger, nullable=False),
-    Column('user_id', Integer, nullable=False),
-    Column('booked_date', DateTime, nullable=False),
-    Column('order_for_days', Integer, nullable=False),
-    Column('return_date', DateTime, nullable=True),
-    Column('booked_forever', Boolean, default=False))
+    Column('prebooked_by_user_id', Integer, nullable=True),
+    Column('finally_booked_by_user_id', Integer, nullable=True),
+    Column('booked_date', Date, nullable=False),
+    Column('order_for_days', Integer, nullable=True),
+    Column('returned', Boolean, default=False),
+    Column('return_date', Date, nullable=True),
+    Column('booked_forever', Boolean, default=False),
+    Column('user_id_history', Integer, nullable=True))
 

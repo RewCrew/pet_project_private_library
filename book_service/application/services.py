@@ -1,3 +1,4 @@
+import datetime
 from typing import Optional
 import requests
 import json
@@ -9,7 +10,7 @@ from evraz.classic.aspects import PointCut
 from evraz.classic.components import component
 
 from . import interfaces
-from .dataclasses import Book
+from .dataclasses import Book, UserBooks
 from evraz.classic.messaging import Publisher, Message
 
 join_points = PointCut()
@@ -47,57 +48,17 @@ class BookService:
     publisher: Publisher
 
     @join_point
-    # @validate_with_dto
     @validate_arguments
-    # def add_book(self, book_info: BookInfo):
     def add_book(self, data: dict):
         book_info = BookInfo(**data)
         new_book = book_info.create_obj(Book)
         book = self.books_repo.get_or_create(new_book)
-        # self.publisher.plan(Message("Exchange", {"action": "create",
-        #                                          "api": "Book",
-        #                                          "api_id": book.book_id}))
         self.books_repo.add(book)
 
     @join_point
-    @validate_with_dto
-    def update(self, book_info: BookInfoUpdate):
-        book = self.get_book(book_info.book_id)
-        book_info.populate_obj(book)
-        self.publisher.plan(Message("Exchange", {"action": "update",
-                                                 "api": "Book",
-                                                 "api_id": book_info.book_id}))
-
-    @join_point
     @validate_arguments
-    def delete_book(self, book_id: int):
-        self.books_repo.delete(book_id)
-        self.publisher.plan(Message("Exchange", {"action": "delete",
-                                                 "api": "Book",
-                                                 "api_id": book_id}))
-
-    @join_point
-    @validate_arguments
-    def take_book(self, book_id: int, user_id: int):
-        book = self.books_repo.take_book(book_id, user_id)
-        self.publisher.plan(Message("Exchange", {"action": "take book",
-                                                 "api": "Book",
-                                                 "api_id": book_id}))
-        self.publisher.plan(Message("Exchange", {"action": "take book",
-                                                 "api": "User",
-                                                 "api_id": user_id}))
-        return book
-
-    @join_point
-    @validate_arguments
-    def return_book(self, book_id: int, user_id: int):
-        book = self.books_repo.return_book(book_id, user_id)
-        self.publisher.plan(Message("Exchange", {"action": "return book",
-                                                 "api": "Book",
-                                                 "api_id": book_id}))
-        self.publisher.plan(Message("Exchange", {"action": "return book",
-                                                 "api": "User",
-                                                 "api_id": user_id}))
+    def return_book(self, book_isbn: int, user_id: int):
+        book = self.books_repo.return_book(book_isbn, user_id)
         return book
 
     @join_point
@@ -125,62 +86,58 @@ class BookService:
             return book
 
     @join_point
-    def buy_book(self, book_isbn:int, user_id:int):
+    def buy_book(self, book_isbn: int, user_id: int):
         book = self.books_repo.buy_book(book_isbn, user_id)
         return book
 
     @join_point
-    def prebook_book(self, book_isbn: int, user_id: int):
-        book = self.books_repo.prebook_book(book_isbn, user_id)
-        return book
-
+    def prebook_book(self, book_isbn: int, user_id: int, order_for_days: Optional[int] = 7):
+        book = self.books_repo.get_by_isbn(book_isbn)
+        if book is None:
+            raise errors.NoBook(message="not valid ID of book")
+        userbook = UserBooks(book_isbn=book.isbn13,
+                             booked_date=datetime.date.today(),
+                             prebooked_by_user_id=user_id,
+                             user_id_history=user_id,
+                             order_for_days=order_for_days,
+                             return_date=datetime.date.today() + datetime.timedelta(order_for_days),
+                             returned=False)
+        book = self.books_repo.get_by_isbn_userbooks(book_isbn)
+        if book is None:
+            self.books_repo.userbook_create(userbook)
+        else:
+            if book.prebooked_by_user_id is None:
+                userbook = self.books_repo.userbook_create(userbook)
+                return userbook
+            else:
+                raise errors.NoBook(message = 'you cant take this book, already booked')
 
     @join_point
-    def get_books_from_api(self, params:list):
+    def get_books_from_api(self, params: list):
         books = {}
         for param in params:
-            books[param]=[]
-            for i in range(1,6):
+            books[param] = []
+            for i in range(1, 6):
                 response = requests.get(f"https://api.itbook.store/1.0/search/{param}/{i}")
                 result = response.content.decode("utf8")
                 result = json.loads(result)
                 if not result["books"]:
                     break
                 query = result["books"]
-                # PUBLISHER Send message to queue
-
-                # CONSUMER --> GET DETAILS --> SAVE TO REPO
                 for book in query:
                     response = requests.get(f"https://api.itbook.store/1.0/books/{book['isbn13']}")
                     result = response.content.decode("utf-8")
                     result = json.loads(result)
-                    # result['tag'] = param
-                    # print(result['isbn10'], type(result['isbn10']))
                     books[param].append(result)
-                    # book_info = BookInfo(**result)
-                    # print(book_info)
                     self.publisher.publish(Message("Exchange", {'data': result}))
-                    print(result)
-
-                # GET LAST DB UPDATE WHERE LAST DATE + HIGH RATING --> SEND TO RABBIT FOR EMAIL
         for k, v in books.items():
             filter = sorted(v, key=lambda x: (-int(x['rating']), x['year']))
             books[k] = filter[:3]
-
         self.publisher.publish(Message("BookExchange", {"data": books}))
         return books
-#
-# class BookUpdateServices()
-#
-#     def get_books_from_rabbit(self):
-#         """
-#         Реализация консьюмера RabbitMQ
-#         :return:
-#         """
-#         ...
-#
-#     def buy_book(self, book_id, user_id):
-#         pass
-#
-#     def prebook_book(self, book_id, user_id):
-#         pass
+
+
+    @join_point
+    def get_history_user_books(self, user_id:int):
+        books = self.books_repo.get_history_user_books(user_id)
+        return books

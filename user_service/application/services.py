@@ -88,8 +88,6 @@ class UsersService:
 
     @join_point
     def message_sender(self, data:dict):
-        print(data, file=sys.stderr)
-        # data = list(data.values())[0]
         root.info(data)
         users = self.user_repo.get_all()
         root.info(users)

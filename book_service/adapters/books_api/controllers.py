@@ -43,8 +43,8 @@ class BooksController:
     @join_point
     def on_post_return_book(self, request: Request, response: Response):
         request.media['user_id'] = request.context.client.user_id
-        self.book_controller.return_book(**request.media)
-        response.media = {'message': 'book returned'}
+        message = self.book_controller.return_book(**request.media)
+        response.media = {'message': message}
 
     @join_point
     def on_get_get_all_books(self, request: Request, response: Response):

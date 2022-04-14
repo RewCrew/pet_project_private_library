@@ -1,3 +1,4 @@
+import datetime
 from typing import Optional
 
 from sqlalchemy import select
@@ -6,7 +7,7 @@ from evraz.classic.components import component
 from evraz.classic.sql_storage import BaseRepository
 
 from book_service.application import interfaces
-from book_service.application.dataclasses import Book
+from book_service.application.dataclasses import Book, UserBooks
 from book_service.application import errors
 
 
@@ -26,6 +27,10 @@ class BooksRepo(BaseRepository, interfaces.BooksRepo):
         query = select(Book).where(Book.isbn13 == isbn)
         return self.session.execute(query).scalars().one_or_none()
 
+    def get_by_isbn_userbooks(self, isbn: int) -> Optional[UserBooks]:
+        query = select(UserBooks).where(UserBooks.book_isbn == isbn, UserBooks.returned == False)
+        return self.session.execute(query).scalars().one_or_none()
+
     def get_or_create(self, book: Book) -> Book:
         if book.isbn13 is None:
             self.add(book)
@@ -37,23 +42,6 @@ class BooksRepo(BaseRepository, interfaces.BooksRepo):
                 book = new_book
         return book
 
-    # def update(self, book: Book):
-    #     book_query = self.session.query(Book).filter_by(book_id=book.book_id).one_or_none()
-    #     if not book_query:
-    #         raise errors.NoBook(message="no book founded")
-    #     if book.author_name is not None:
-    #         book_query.author_name = book.author_name
-    #     if book.book_title is not None:
-    #         book_query.book_title = book.book_title
-    #     self.session.flush()
-    #     self.session.commit()
-    #     return book_query
-
-    def delete(self, book_id: int):
-        book = self.session.query(Book).filter(Book.book_id == book_id).one_or_none()
-        if not book:
-            raise errors.NoBook(message="no book to delete")
-        self.session.delete(book)
 
     def take_book(self, book_id: int, user_id: int):
         selected_book = self.get_by_id(book_id)
@@ -67,24 +55,36 @@ class BooksRepo(BaseRepository, interfaces.BooksRepo):
                 raise errors.NoBook(message="book already taken")
 
     def return_book(self, book_id: int, user_id: int):
-        selected_book = self.get_by_id(book_id)
+        selected_book = self.session.query(UserBooks).where(UserBooks.prebooked_by_user_id==user_id, UserBooks.returned==False).one_or_none()
         if selected_book is None:
-            raise errors.NoBook(message="not valid ID of book")
+            raise errors.NoBook(message="Book not ordered by you")
         else:
-            if selected_book.user_id is not None:
-                if selected_book.user_id == user_id:
-                    selected_book.user_id = None
-                else:
-                    raise errors.NoBook(message="you are not an owner of this book")
-            else:
-                raise errors.NoBook(message="book no need to be returned")
+            return_days = (datetime.datetime.today() - selected_book.return_date)
+            selected_book.prebooked_by_user_id = None
+            selected_book.returned = True
+            message = ("book returned")
+
+            if return_days.days > 0:
+                selected_book.prebooked_by_user_id = None
+                selected_book.returned = True
+                message = (f" user {user_id} please return book in time next time")
+                return message
+            return message
+
+
 
     def get_all(self):
         books = self.session.query(Book).order_by(Book.book_id).all()
         return books
 
     def get_user_books(self, user_id: int):
-        selected_books = self.session.query(Book).where(Book.prebooked_by_user_id == user_id).all()
+        selected_books = self.session.query(UserBooks).where(UserBooks.prebooked_by_user_id == user_id).all()
+        return selected_books
+
+    def get_history_user_books(self, user_id:int):
+        selected_books = self.session.query(UserBooks.book_isbn).where(UserBooks.user_id_history == user_id,
+                                                             UserBooks.returned == True,
+                                                             UserBooks.booked_forever == False).all()
         return selected_books
 
     def get_free_books(self):
@@ -113,3 +113,7 @@ class BooksRepo(BaseRepository, interfaces.BooksRepo):
             else:
                 book.prebooked_by_user_id = user_id
                 return book
+
+    def userbook_create(self, userbook:UserBooks):
+        self.session.add(userbook)
+        self.session.flush()

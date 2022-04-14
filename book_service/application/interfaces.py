@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
-from .dataclasses import Book
+from typing import Optional
+
+from .dataclasses import Book, UserBooks
 
 
 class BooksRepo(ABC):
@@ -20,11 +22,7 @@ class BooksRepo(ABC):
         pass
 
     @abstractmethod
-    def delete(self, book_id: int):
-        pass
-
-    @abstractmethod
-    def prebook_book(self, book_isbn: int, user_id: int):
+    def get_by_isbn_userbooks(self, isbn:int):
         pass
 
     @abstractmethod
@@ -32,7 +30,7 @@ class BooksRepo(ABC):
         pass
 
     @abstractmethod
-    def return_book(self, book_id: int, user_id: int):
+    def return_book(self, book_isbn: int, user_id: int):
         pass
 
     @abstractmethod
@@ -45,4 +43,12 @@ class BooksRepo(ABC):
 
     @abstractmethod
     def get_free_books(self):
+        pass
+
+    @abstractmethod
+    def userbook_create(self, userbook: UserBooks):
+        pass
+
+    @abstractmethod
+    def get_history_user_books(self, user_id:int):
         pass
