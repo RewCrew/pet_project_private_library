@@ -44,7 +44,7 @@ def test_get_book(book_test):
 
 
 def test_wrong_book(book_test):
-    with pytest.raises(errors.NoBook):
+    with pytest.raises(errors.ErrorBook):
         book_test.get_book(2)
 
 
@@ -60,7 +60,7 @@ def test_update_book(book_test):
 
 
 def test_wrong_update_book(book_test):
-    with pytest.raises(errors.NoBook):
+    with pytest.raises(errors.ErrorBook):
         book_test.update(**wrong_book_update)
 
 

@@ -81,7 +81,7 @@ class BookService:
     def get_book(self, book_isbn: int):
         book = self.books_repo.get_by_isbn(book_isbn)
         if book is None or book_isbn != book.isbn13:
-            raise errors.NoBook(message="No book exist")
+            raise errors.ErrorBook(message="No book exist")
         else:
             return book
 
@@ -94,7 +94,7 @@ class BookService:
     def prebook_book(self, book_isbn: int, user_id: int, order_for_days: Optional[int] = 7):
         book = self.books_repo.get_by_isbn(book_isbn)
         if book is None:
-            raise errors.NoBook(message="not valid ID of book")
+            raise errors.ErrorBook(message="not valid ID of book")
         userbook = UserBooks(book_isbn=book.isbn13,
                              booked_date=datetime.date.today(),
                              prebooked_by_user_id=user_id,
@@ -110,7 +110,7 @@ class BookService:
                 userbook = self.books_repo.userbook_create(userbook)
                 return userbook
             else:
-                raise errors.NoBook(message = 'you cant take this book, already booked or bought')
+                raise errors.ErrorBook(message = 'you cant take this book, already booked or bought')
 
     @join_point
     def get_books_from_api(self, params: list):
@@ -151,6 +151,6 @@ class BookService:
         if price:
             filt, value = price.split(':')
             if filt not in ('lt, gt, lte, gte, eq'):
-                raise errors.NoBook(message='wrong filters, please check your spelling')
+                raise errors.ErrorBook(message='wrong filters, please check your spelling')
         result = self.books_repo.get_by_filter(filters)
         return result

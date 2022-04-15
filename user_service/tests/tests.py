@@ -38,7 +38,7 @@ def test_get_user(user_test):
 
 
 def test_get_wrong_user(user_test):
-    with pytest.raises(errors.NoUser):
+    with pytest.raises(errors.ErrorUser):
         user_test.get_user(5)
 
 
@@ -49,5 +49,5 @@ def test_update_user(user_test):
 
 
 def test_update_wrong_user(user_test):
-    with pytest.raises(errors.NoUser):
+    with pytest.raises(errors.ErrorUser):
         user_test.update_user(**wrong_user_update)

@@ -44,7 +44,7 @@ class UsersRepo(BaseRepository, interfaces.UsersRepo):
     # def update(self, user: UserUpdate):
     #     user_query = self.session.query(User).filter_by(user_id=user.id).one_or_none()
     #     if not user_query:
-    #         raise errors.NoUser(message="no user founded")
+    #         raise errors.ErrorUser(message="no user founded")
     #     if user.name is not None:
     #         user_query.name = user.name
     #     if user.email is not None:
