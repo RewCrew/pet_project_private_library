@@ -1,7 +1,8 @@
 import json
-from book_service.composites.app_api import Application as app
 
 import requests
+
+from book_service.composites.app_api import Application as app
 
 
 def get_books(params: list):

@@ -1,4 +1,5 @@
 import click
+
 from book_service.composites import book_loader
 
 # def create_cli(get_books, MessageBus):

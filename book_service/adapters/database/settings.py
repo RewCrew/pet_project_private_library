@@ -1,6 +1,6 @@
-from pydantic import BaseSettings
-
 import os
+
+from pydantic import BaseSettings
 
 user = os.getenv('USER', 'superuser')
 password = os.getenv('PASSWORD', 'password')

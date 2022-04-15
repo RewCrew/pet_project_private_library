@@ -1,6 +1,7 @@
 import pytest
 from attr import asdict
-from book_service.application import services, errors, dataclasses
+
+from book_service.application import dataclasses, errors, services
 
 
 @pytest.fixture(scope='function')

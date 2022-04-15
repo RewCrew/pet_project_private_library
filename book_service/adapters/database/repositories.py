@@ -1,15 +1,14 @@
 import datetime
-from typing import Optional, List
+from typing import List, Optional
 
-from sqlalchemy import select, or_
+from sqlalchemy import or_, select
 
 from evraz.classic.components import component
 from evraz.classic.sql_storage import BaseRepository
 
-from book_service.application import interfaces
-from book_service.application.dataclasses import Book, UserBooks
-from book_service.application import errors
 from book_service.adapters.database import tables
+from book_service.application import errors, interfaces
+from book_service.application.dataclasses import Book, UserBooks
 
 
 @component

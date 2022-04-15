@@ -1,5 +1,13 @@
 from sqlalchemy import (
-    Column, Integer, BigInteger, MetaData, String, Table, Boolean, Date, Float
+    BigInteger,
+    Boolean,
+    Column,
+    Date,
+    Float,
+    Integer,
+    MetaData,
+    String,
+    Table,
 )
 
 naming_convention = {

@@ -1,7 +1,10 @@
-import pytest
 from unittest.mock import Mock
-from book_service.application import interfaces, dataclasses
+
+import pytest
+
 from evraz.classic.messaging import Publisher
+
+from book_service.application import dataclasses, interfaces
 
 
 @pytest.fixture(scope='function')
