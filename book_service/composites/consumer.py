@@ -27,7 +27,7 @@
 #
 # #
 # class Application:
-#     book_controller = services.BookService(books_repo=DB.books_repo)
+#     books = services.BookService(books_repo=DB.books_repo)
 #     is_dev_mode = Settings.books_api.IS_DEV_MODE
 #
 # #
@@ -35,7 +35,7 @@
 #     connection = Connection(Settings.message_bus.BROKER_URL)
 #
 #     message_bus.broker_scheme.declare(connection)
-#     consumer = message_bus.create_consumer(connection, Application.book_controller)
+#     consumer = message_bus.create_consumer(connection, Application.books)
 #
 # #
 # class Application:

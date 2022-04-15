@@ -6,7 +6,7 @@ import requests
 
 
 def get_books(params:list):
-    app.book_controller.get_books_from_api(params=params)
+    app.books.get_books_from_api(params=params)
 
 # def get_books(params:list):
 #     books = []

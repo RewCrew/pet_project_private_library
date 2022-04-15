@@ -142,3 +142,15 @@ class BookService:
     def get_history_user_books(self, user_id:int):
         books = self.books_repo.get_history_user_books(user_id)
         return books
+
+
+    @join_point
+    @validate_arguments
+    def filter_books(self, filters:dict):
+        price = filters.get('price')
+        if price:
+            filt, value = price.split(':')
+            if filt not in ('lt, gt, lte, gte, eq'):
+                raise errors.NoBook(message='wrong filters, please check your spelling')
+        result = self.books_repo.get_by_filter(filters)
+        return result

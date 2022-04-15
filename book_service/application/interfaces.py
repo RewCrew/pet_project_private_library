@@ -52,3 +52,7 @@ class BooksRepo(ABC):
     @abstractmethod
     def get_history_user_books(self, user_id:int):
         pass
+
+    @abstractmethod
+    def get_by_filter(self, filter_data:dict):
+        pass

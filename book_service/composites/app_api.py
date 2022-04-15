@@ -35,12 +35,12 @@ class PublisherMessageBus:
 
 
 class Application:
-    book_controller = services.BookService(books_repo=DB.books_repo, publisher=PublisherMessageBus.publisher)
+    books = services.BookService(books_repo=DB.books_repo, publisher=PublisherMessageBus.publisher)
     is_dev_mode = Settings.books_api.IS_DEV_MODE
 
 
 class ConsumerMessageBus:
-    consumer = message_bus.create_consumer(PublisherMessageBus.connection, Application.book_controller)
+    consumer = message_bus.create_consumer(PublisherMessageBus.connection, Application.books)
 
     @staticmethod
     def declare_scheme():
@@ -53,7 +53,7 @@ class Aspects:
 
 
 app = books_api.create_app(
-    books=Application.book_controller,
+    books=Application.books,
     is_dev_mode=Application.is_dev_mode
 )
 

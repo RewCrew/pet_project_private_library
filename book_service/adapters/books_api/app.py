@@ -15,6 +15,6 @@ def create_app(
 
     app = App(prefix='/api')
 
-    app.register(controllers.BooksController(book_controller=books, authenticator=authenticator))
+    app.register(controllers.Books(books=books, authenticator=authenticator))
 
     return app
