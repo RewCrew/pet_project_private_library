@@ -17,10 +17,6 @@ class UsersRepo(ABC):
         pass
 
     @abstractmethod
-    def delete(self, user_id: int):
-        pass
-
-    @abstractmethod
     def get_all(self):
         pass
 

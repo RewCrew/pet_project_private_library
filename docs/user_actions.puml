@@ -1,0 +1,48 @@
+@startuml
+title Precedents DIAG
+
+:Guest: as guest
+:User: as user
+
+
+left to right direction
+
+rectangle "Autorization"{
+    usecase "Login" as login
+    usecase "Register" as register
+}
+
+
+
+
+rectangle "Library"{
+(Get all books) as get_books
+(Get user active books) as get_user_active_books
+(Get user history books) as get_user_history
+(Book book) as book
+(Buy book) as Buy
+(Return book) as return
+(Get book info) as book_info
+}
+
+guest-->login
+guest-->register
+guest --> get_books
+guest --> book_info
+
+
+
+
+user --> get_books
+user --> get_user_active_books
+user --> get_user_history
+user --> book
+user --> Buy
+user --> return
+user --> book_info
+
+
+
+
+@enduml
+

@@ -32,11 +32,11 @@ class UsersRepo(BaseRepository, interfaces.UsersRepo):
                 user = new_user
         return user
 
-    def delete(self, user_id: int):
-        query = delete(User).where(User.id == user_id)
-        self.session.execute(query)
-        self.session.flush()
-
+    # def delete(self, user_id: int):
+    #     query = delete(User).where(User.id == user_id)
+    #     self.session.execute(query)
+    #     self.session.flush()
+    #
     def get_all(self):
         users = self.session.query(User).order_by(User.id).all()
         return users

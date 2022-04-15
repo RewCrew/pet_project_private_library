@@ -1,4 +1,4 @@
-import sys
+
 from typing import Optional
 
 import jwt
@@ -61,22 +61,6 @@ class UsersService:
             , 'kerim_project', algorithm='HS256')
         return token
 
-    @join_point
-    @validate_arguments
-    def delete_user(self, user_id: int):
-        self.user_repo.delete(user_id)
-        self.publisher.plan(Message("Exchange", {"action": "delete",
-                                                 "api": "User",
-                                                 "api_id": user_id}))
-
-    @join_point
-    @validate_with_dto
-    def update_user(self, user: UserUpdate):
-        user_to_update = self.get_user(user.id)
-        user.populate_obj(user_to_update)
-        self.publisher.plan(Message("Exchange", {"action": "update",
-                                                 "api": "User",
-                                                 "api_id": user.id}))
 
     @join_point
     def get_user(self, id: int):
@@ -88,8 +72,7 @@ class UsersService:
 
     @join_point
     def message_sender(self, data:dict):
-        root.info(data)
         users = self.user_repo.get_all()
-        root.info(users)
         for user in users:
-            root.info(f"attention user {user.name}, new books {data} arrived")
+            root.info(f"attention user {user.name},\n "
+                      f"new books {data} arrived\n")
