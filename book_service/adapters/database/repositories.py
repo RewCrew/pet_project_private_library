@@ -138,19 +138,17 @@ class BooksRepo(BaseRepository, interfaces.BooksRepo):
 
     @staticmethod
     def filter_price(filters: dict, query):
-        if 'price' in filters:
-            price = filters.pop('price')
-            filt, value = price.split(':')
-            if filt == 'lt':
-                query = query.filter(tables.books.c.price < value)
-            elif filt == 'gt':
-                query = query.filter(tables.books.c.price > value)
-            elif filt == 'lte':
-                query = query.filter(tables.books.c.price <= value)
-            elif filt == 'gte':
-                query = query.filter(tables.books.c.price >= value)
-            else:
-                query = query.filter(tables.books.c.price == value)
+        if ('min_price' in filters) and ('max_price' in filters):
+            min_price = filters.get('min_price')
+            max_price = filters.get('max_price')
+            query = query.filter(tables.books.c.price >= min_price, tables.books.c.price <= max_price)
+        elif 'min_price' in filters:
+            min_price = filters.pop('min_price')
+            query = query.filter(tables.books.c.price >= min_price)
+        elif 'max_price' in filters:
+            max_price = filters.pop('max_price')
+            query = query.filter(tables.books.c.price <= max_price)
+
         return query
 
     @staticmethod

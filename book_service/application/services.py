@@ -55,6 +55,7 @@ class BookService:
         book = self.books_repo.get_or_create(new_book)
         self.books_repo.add(book)
 
+
     @join_point
     @validate_arguments
     def return_book(self, book_isbn: int, user_id: int):
@@ -147,10 +148,10 @@ class BookService:
     @join_point
     @validate_arguments
     def filter_books(self, filters:dict):
-        price = filters.get('price')
-        if price:
-            filt, value = price.split(':')
-            if filt not in ('lt, gt, lte, gte, eq'):
+        min_price = filters.get('min_price')
+        max_price = filters.get('max_price')
+        if (min_price is not None and (not min_price.isdigit())) \
+                or (max_price is not None and (not max_price.isdigit())):
                 raise errors.ErrorBook(message='wrong filters, please check your spelling')
         result = self.books_repo.get_by_filter(filters)
         return result
