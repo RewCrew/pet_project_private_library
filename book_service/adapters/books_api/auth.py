@@ -6,9 +6,9 @@ class Permissions:
 
 
 class Groups:
-    ADMINS = Group('admins', permissions=(Permissions.FULL_CONTROL,))
+    ADMINS = Group('admins', permissions=(Permissions.FULL_CONTROL, ))
 
 
 jwt_strategy = strategies.JWT(secret_key='kerim_project')
 
-ALL_GROUPS = (Groups.ADMINS,)
+ALL_GROUPS = (Groups.ADMINS, )

@@ -4,9 +4,7 @@ from evraz.classic.components import component
 from .join_points import join_point
 from falcon import Request, Response
 
-from evraz.classic.http_auth import (
-    authenticate,
-    authenticator_needed)
+from evraz.classic.http_auth import (authenticate, authenticator_needed)
 
 
 @authenticator_needed
@@ -36,52 +34,62 @@ class Books:
     @join_point
     def on_get_get_all_books(self, request: Request, response: Response):
         books = self.books.get_all()
-        response.media = {'library': [{
-            'book id': book.book_id,
-            'title': book.title,
-            'authors': book.authors,
-            'subtitle': book.subtitle,
-            'publisher': book.publisher,
-            'isbn13': book.isbn13,
-            'pages': book.pages,
-            'year': book.year,
-            'rating': book.rating,
-            'desc': book.desc,
-            'price': book.price,
-            'image': book.image,
-            'url': book.url,
-            'isbn10': book.isbn10,
-        } for book in books]}
+        response.media = {
+            'library': [
+                {
+                    'book id': book.book_id,
+                    'title': book.title,
+                    'authors': book.authors,
+                    'subtitle': book.subtitle,
+                    'publisher': book.publisher,
+                    'isbn13': book.isbn13,
+                    'pages': book.pages,
+                    'year': book.year,
+                    'rating': book.rating,
+                    'desc': book.desc,
+                    'price': book.price,
+                    'image': book.image,
+                    'url': book.url,
+                    'isbn10': book.isbn10,
+                } for book in books
+            ]
+        }
 
     @join_point
     def on_get_get_book(self, request: Request, response: Response):
         isbn = request.get_param('isbn')
         book = self.books.get_book(int(isbn))
-        response.media = {'library': {
-            'book id': book.book_id,
-            'title': book.title,
-            'authors': book.authors,
-            'subtitle': book.subtitle,
-            'publisher': book.publisher,
-            'isbn13': book.isbn13,
-            'pages': book.pages,
-            'year': book.year,
-            'rating': book.rating,
-            'desc': book.desc,
-            'price': book.price,
-            'image': book.image,
-            'url': book.url,
-            'isbn10': book.isbn10,
-        }}
+        response.media = {
+            'library': {
+                'book id': book.book_id,
+                'title': book.title,
+                'authors': book.authors,
+                'subtitle': book.subtitle,
+                'publisher': book.publisher,
+                'isbn13': book.isbn13,
+                'pages': book.pages,
+                'year': book.year,
+                'rating': book.rating,
+                'desc': book.desc,
+                'price': book.price,
+                'image': book.image,
+                'url': book.url,
+                'isbn10': book.isbn10,
+            }
+        }
 
     @authenticate
     @join_point
     def on_get_get_user_books(self, request: Request, response: Response):
         user_id = int(request.context.client.user_id)
         books = self.books.get_user_books(user_id)
-        response.media = {f'user {request.context.client.user_id} active books': [{
-            'book isbn': book.book_isbn
-        } for book in books]}
+        response.media = {
+            f'user {request.context.client.user_id} active books': [
+                {
+                    'book isbn': book.book_isbn
+                } for book in books
+            ]
+        }
 
     @authenticate
     @join_point
@@ -100,9 +108,13 @@ class Books:
     def on_get_get_history_books(self, request: Request, response: Response):
         user_id = int(request.context.client.user_id)
         books = self.books.get_history_user_books(user_id)
-        response.media = {f'user {request.context.client.user_id} took and returned next books': [{
-            'book isbn': book.book_isbn
-        } for book in books]}
+        response.media = {
+            f'user {request.context.client.user_id} took and returned next books': [
+                {
+                    'book isbn': book.book_isbn
+                } for book in books
+            ]
+        }
 
     @join_point
     def on_get_show_filtered_books(self, request: Request, response: Response):

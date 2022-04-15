@@ -4,9 +4,9 @@ from book_service.composites.app_api import Application as app
 import requests
 
 
-
-def get_books(params:list):
+def get_books(params: list):
     app.books.get_books_from_api(params=params)
+
 
 # def get_books(params:list):
 #     books = []
@@ -33,7 +33,6 @@ def get_books(params:list):
 #     #     result = response.content.decode("utf-8")
 #     #     result = json.loads(result)
 #     return books
-
 
 #
 # if __name__ == '__main__':

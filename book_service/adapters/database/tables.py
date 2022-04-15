@@ -1,13 +1,6 @@
 from sqlalchemy import (
-    Column,
-    Integer,
-    BigInteger,
-    MetaData,
-    String,
-    Table,
-    Boolean,
-    Date,
-    Float)
+    Column, Integer, BigInteger, MetaData, String, Table, Boolean, Date, Float
+)
 
 naming_convention = {
     'ix': 'ix_%(column_0_label)s',
@@ -20,8 +13,7 @@ naming_convention = {
 metadata = MetaData(naming_convention=naming_convention)
 
 books = Table(
-    'books',
-    metadata,
+    'books', metadata,
     Column('book_id', Integer, primary_key=True, autoincrement=True),
     Column('title', String, nullable=False),
     Column('subtitle', String, nullable=False),
@@ -37,13 +29,10 @@ books = Table(
     Column('image', String, nullable=False),
     Column('url', String, nullable=False),
     Column('desc', String, nullable=False)
-
 )
 
-
 userbooks = Table(
-    'userbooks',
-    metadata,
+    'userbooks', metadata,
     Column('id', Integer, primary_key=True, autoincrement=True),
     Column('book_isbn', BigInteger, nullable=False),
     Column('prebooked_by_user_id', Integer, nullable=True),
@@ -53,5 +42,5 @@ userbooks = Table(
     Column('returned', Boolean, default=False),
     Column('return_date', Date, nullable=True),
     Column('booked_forever', Boolean, default=False),
-    Column('user_id_history', Integer, nullable=True))
-
+    Column('user_id_history', Integer, nullable=True)
+)

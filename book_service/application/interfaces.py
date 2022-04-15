@@ -5,6 +5,7 @@ from .dataclasses import Book, UserBooks
 
 
 class BooksRepo(ABC):
+
     @abstractmethod
     def add(self, book: Book):
         pass
@@ -18,11 +19,11 @@ class BooksRepo(ABC):
         pass
 
     @abstractmethod
-    def get_by_isbn(self, isbn:int):
+    def get_by_isbn(self, isbn: int):
         pass
 
     @abstractmethod
-    def get_by_isbn_userbooks(self, isbn:int):
+    def get_by_isbn_userbooks(self, isbn: int):
         pass
 
     @abstractmethod
@@ -50,9 +51,9 @@ class BooksRepo(ABC):
         pass
 
     @abstractmethod
-    def get_history_user_books(self, user_id:int):
+    def get_history_user_books(self, user_id: int):
         pass
 
     @abstractmethod
-    def get_by_filter(self, filter_data:dict):
+    def get_by_filter(self, filter_data: dict):
         pass

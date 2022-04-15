@@ -24,11 +24,9 @@ test_data_book_user = {
 
 user_id = {'user_id': 1}
 
-book_update = {'author_name': 'updated_author',
-               'book_id': 1}
+book_update = {'author_name': 'updated_author', 'book_id': 1}
 
-wrong_book_update = {'author_name': 'updated_author',
-                     'book_id': 2}
+wrong_book_update = {'author_name': 'updated_author', 'book_id': 2}
 
 
 def test_add_book(book_test):

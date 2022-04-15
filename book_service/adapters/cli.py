@@ -1,9 +1,7 @@
 import click
 from book_service.composites import book_loader
 
-
 # def create_cli(get_books, MessageBus):
-
 
 # @click.command()
 # @click.argument('params', nargs=-1, type=click.UNPROCESSED)  # FIXME
@@ -33,6 +31,7 @@ from book_service.composites import book_loader
 
 
 def create_cli(MessageBus):
+
     @click.group()
     def cli():
         pass

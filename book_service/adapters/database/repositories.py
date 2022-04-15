@@ -11,8 +11,10 @@ from book_service.application.dataclasses import Book, UserBooks
 from book_service.application import errors
 from book_service.adapters.database import tables
 
+
 @component
 class BooksRepo(BaseRepository, interfaces.BooksRepo):
+
     def add(self, book: Book):
         self.session.add(book)
         self.session.flush()
@@ -28,7 +30,9 @@ class BooksRepo(BaseRepository, interfaces.BooksRepo):
         return self.session.execute(query).scalars().one_or_none()
 
     def get_by_isbn_userbooks(self, isbn: int) -> Optional[UserBooks]:
-        query = select(UserBooks).where(UserBooks.book_isbn == isbn, UserBooks.returned == False)
+        query = select(UserBooks).where(
+            UserBooks.book_isbn == isbn, UserBooks.returned == False
+        )
         return self.session.execute(query).scalars().one_or_none()
 
     def get_or_create(self, book: Book) -> Book:
@@ -42,7 +46,6 @@ class BooksRepo(BaseRepository, interfaces.BooksRepo):
                 book = new_book
         return book
 
-
     def take_book(self, book_id: int, user_id: int):
         selected_book = self.get_by_id(book_id)
         if selected_book is None:
@@ -55,7 +58,10 @@ class BooksRepo(BaseRepository, interfaces.BooksRepo):
                 raise errors.ErrorBook(message="book already taken")
 
     def return_book(self, book_id: int, user_id: int):
-        selected_book = self.session.query(UserBooks).where(UserBooks.prebooked_by_user_id==user_id, UserBooks.returned==False).one_or_none()
+        selected_book = self.session.query(UserBooks).where(
+            UserBooks.prebooked_by_user_id == user_id,
+            UserBooks.returned == False
+        ).one_or_none()
         if selected_book is None:
             raise errors.ErrorBook(message="Book not ordered by you")
         else:
@@ -67,30 +73,36 @@ class BooksRepo(BaseRepository, interfaces.BooksRepo):
             if return_days.days > 0:
                 selected_book.prebooked_by_user_id = None
                 selected_book.returned = True
-                message = (f" user {user_id} please return book in time next time")
+                message = (
+                    f" user {user_id} please return book in time next time"
+                )
                 return message
             return message
-
-
 
     def get_all(self):
         books = self.session.query(Book).order_by(Book.book_id).all()
         return books
 
     def get_user_books(self, user_id: int):
-        selected_books = self.session.query(UserBooks).where(UserBooks.prebooked_by_user_id == user_id, UserBooks.booked_forever is not True).all()
+        selected_books = self.session.query(UserBooks).where(
+            UserBooks.prebooked_by_user_id == user_id, UserBooks.booked_forever
+            is not True
+        ).all()
         return selected_books
 
-    def get_history_user_books(self, user_id:int):
-        selected_books = self.session.query(UserBooks.book_isbn).where(UserBooks.user_id_history == user_id,
-                                                             UserBooks.returned == True,
-                                                             UserBooks.booked_forever == False).all()
+    def get_history_user_books(self, user_id: int):
+        selected_books = self.session.query(UserBooks.book_isbn).where(
+            UserBooks.user_id_history == user_id, UserBooks.returned == True,
+            UserBooks.booked_forever == False
+        ).all()
         return selected_books
 
     def get_free_books(self):
-        selected_books = self.session.query(Book).join(UserBooks.book_isbn == Book.isbn13).order_by(Book.book_id).all()
+        selected_books = self.session.query(Book).join(
+            UserBooks.book_isbn == Book.isbn13
+        ).order_by(Book.book_id).all()
         return selected_books
-    
+
     def buy_book(self, book_isbn, user_id):
         book = self.get_by_isbn_userbooks(book_isbn)
         if book is None:
@@ -105,12 +117,9 @@ class BooksRepo(BaseRepository, interfaces.BooksRepo):
                 book.return_date = datetime.date.today()
                 return book
 
-
-    def userbook_create(self, userbook:UserBooks):
+    def userbook_create(self, userbook: UserBooks):
         self.session.add(userbook)
         self.session.flush()
-
-
 
     def get_by_filter(self, filter_data: dict) -> Optional[List[Book]]:
         query = self.session.query(tables.books)
@@ -128,12 +137,18 @@ class BooksRepo(BaseRepository, interfaces.BooksRepo):
             query = query.filter(tables.books.c.authors.ilike(f'%{authors}%'))
         if 'publisher' in filters:
             publisher = filters['publisher']
-            query = query.filter(tables.books.c.publisher.ilike(f'%{publisher}%'))
+            query = query.filter(
+                tables.books.c.publisher.ilike(f'%{publisher}%')
+            )
         if 'keyword' in filters:
             keyword = filters['keyword']
-            query = query.filter(or_(tables.books.c.title.ilike(f'%{keyword}%'),
-                                     tables.books.c.desc.ilike(f'%{keyword}%'),
-                                     tables.books.c.subtitle.ilike(f'%{keyword}%')))
+            query = query.filter(
+                or_(
+                    tables.books.c.title.ilike(f'%{keyword}%'),
+                    tables.books.c.desc.ilike(f'%{keyword}%'),
+                    tables.books.c.subtitle.ilike(f'%{keyword}%')
+                )
+            )
         return query
 
     @staticmethod
@@ -141,7 +156,10 @@ class BooksRepo(BaseRepository, interfaces.BooksRepo):
         if ('min_price' in filters) and ('max_price' in filters):
             min_price = filters.get('min_price')
             max_price = filters.get('max_price')
-            query = query.filter(tables.books.c.price >= min_price, tables.books.c.price <= max_price)
+            query = query.filter(
+                tables.books.c.price >= min_price,
+                tables.books.c.price <= max_price
+            )
         elif 'min_price' in filters:
             min_price = filters.pop('min_price')
             query = query.filter(tables.books.c.price >= min_price)

@@ -35,4 +35,4 @@ class UserBooks:
     return_date: Optional[datetime.date] = None
     booked_forever: Optional[bool] = False
     id: Optional[int] = None
-    user_id_history:[int]=None
+    user_id_history: [int] = None

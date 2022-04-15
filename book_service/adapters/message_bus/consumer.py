@@ -8,7 +8,7 @@ from .scheme import broker_scheme
 
 
 def create_consumer(
-        connection: Connection, books: services.BookService
+    connection: Connection, books: services.BookService
 ) -> KombuConsumer:
     consumer = KombuConsumer(connection=connection, scheme=broker_scheme)
 

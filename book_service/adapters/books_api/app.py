@@ -5,8 +5,8 @@ from book_service.application import services
 
 
 def create_app(
-        is_dev_mode: bool,
-        books: services.BookService,
+    is_dev_mode: bool,
+    books: services.BookService,
 ) -> App:
     authenticator = Authenticator(app_groups=auth.ALL_GROUPS)
 

@@ -12,10 +12,8 @@ from book_service.composites import book_loader
 #     click.echo('echo')
 #     book_loader.get_books(*params)
 
-
 from book_service.composites.app_api import (
-PublisherMessageBus,
-ConsumerMessageBus
+    PublisherMessageBus, ConsumerMessageBus
 )
 
 from book_service.adapters.cli import create_cli

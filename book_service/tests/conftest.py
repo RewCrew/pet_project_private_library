@@ -7,20 +7,14 @@ from evraz.classic.messaging import Publisher
 @pytest.fixture(scope='function')
 def book():
     return dataclasses.Book(
-        book_id=1,
-        book_title='book',
-        author_name='author',
-        user_id=None
+        book_id=1, book_title='book', author_name='author', user_id=None
     )
 
 
 @pytest.fixture(scope='function')
 def book_taken():
     return dataclasses.Book(
-        book_id=1,
-        book_title='book',
-        author_name='author',
-        user_id=1
+        book_id=1, book_title='book', author_name='author', user_id=1
     )
 
 
