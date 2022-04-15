@@ -27,7 +27,7 @@ class BookInfo(DTO):
     year: int
     rating: int
     desc: str
-    price: str
+    price: float
     image: str
     url: str
     isbn10: Optional[str] = None
@@ -106,11 +106,11 @@ class BookService:
         if book is None:
             self.books_repo.userbook_create(userbook)
         else:
-            if book.prebooked_by_user_id is None:
+            if book.prebooked_by_user_id is None and book.finally_booked_by_user_id is None:
                 userbook = self.books_repo.userbook_create(userbook)
                 return userbook
             else:
-                raise errors.NoBook(message = 'you cant take this book, already booked')
+                raise errors.NoBook(message = 'you cant take this book, already booked or bought')
 
     @join_point
     def get_books_from_api(self, params: list):
@@ -129,6 +129,7 @@ class BookService:
                     result = response.content.decode("utf-8")
                     result = json.loads(result)
                     books[param].append(result)
+                    result['price']=float(result['price'][1:])
                     self.publisher.publish(Message("Exchange", {'data': result}))
         for k, v in books.items():
             filter = sorted(v, key=lambda x: (-int(x['rating']), x['year']))

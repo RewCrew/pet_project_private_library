@@ -59,7 +59,7 @@ class BooksRepo(BaseRepository, interfaces.BooksRepo):
         if selected_book is None:
             raise errors.NoBook(message="Book not ordered by you")
         else:
-            return_days = (datetime.datetime.today() - selected_book.return_date)
+            return_days = (datetime.date.today() - selected_book.return_date)
             selected_book.prebooked_by_user_id = None
             selected_book.returned = True
             message = ("book returned")
@@ -78,7 +78,7 @@ class BooksRepo(BaseRepository, interfaces.BooksRepo):
         return books
 
     def get_user_books(self, user_id: int):
-        selected_books = self.session.query(UserBooks).where(UserBooks.prebooked_by_user_id == user_id).all()
+        selected_books = self.session.query(UserBooks).where(UserBooks.prebooked_by_user_id == user_id, UserBooks.booked_forever is not True).all()
         return selected_books
 
     def get_history_user_books(self, user_id:int):
@@ -88,31 +88,23 @@ class BooksRepo(BaseRepository, interfaces.BooksRepo):
         return selected_books
 
     def get_free_books(self):
-        selected_books = self.session.query(Book).where(Book.user_id is None).order_by(Book.book_id).all()
+        selected_books = self.session.query(Book).join(UserBooks.book_isbn == Book.isbn13).order_by(Book.book_id).all()
         return selected_books
     
     def buy_book(self, book_isbn, user_id):
-        book = self.get_by_isbn(book_isbn)
+        book = self.get_by_isbn_userbooks(book_isbn)
         if book is None:
-            raise errors.NoBook(message='no book exist')
+            raise errors.NoBook(message='Book not booked buy you')
         else:
-            if book.prebooked_by_user_id == user_id:
+            if book.prebooked_by_user_id != user_id or book.finally_booked_by_user_id is not None:
+                raise errors.NoBook(message='Book bought by someone else')
+            else:
                 book.prebooked_by_user_id = None
                 book.finally_booked_by_user_id = user_id
+                book.booked_forever = True
+                book.return_date = datetime.date.today()
                 return book
-            else:
-                raise errors.NoBook(message='book not prebooked by you')
 
-    def prebook_book(self, book_isbn, user_id):
-        book = self.get_by_isbn(book_isbn)
-        if book is None:
-            raise errors.NoBook(message='no book exist')
-        else:
-            if book.prebooked_by_user_id is not None or book.finally_booked_by_user_id is not None:
-                raise errors.NoBook(message='Book ordered or bought by someone else')
-            else:
-                book.prebooked_by_user_id = user_id
-                return book
 
     def userbook_create(self, userbook:UserBooks):
         self.session.add(userbook)

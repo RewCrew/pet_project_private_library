@@ -6,7 +6,8 @@ from sqlalchemy import (
     String,
     Table,
     Boolean,
-    Date)
+    Date,
+    Float)
 
 naming_convention = {
     'ix': 'ix_%(column_0_label)s',
@@ -32,7 +33,7 @@ books = Table(
     Column('year', Integer, nullable=False),
     Column('rating', Integer, nullable=False),
     Column('desc', String, nullable=False),
-    Column('price', String, nullable=False),
+    Column('price', Float, nullable=False),
     Column('image', String, nullable=False),
     Column('url', String, nullable=False),
     Column('desc', String, nullable=False)

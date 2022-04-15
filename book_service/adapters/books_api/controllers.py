@@ -64,8 +64,6 @@ class BooksController:
             'image': book.image,
             'url': book.url,
             'isbn10': book.isbn10,
-            'prebooked_by_user_id': book.prebooked_by_user_id,
-            'finally_booked_by_user_id': book.finally_booked_by_user_id
         } for book in books]}
 
     @join_point
@@ -87,8 +85,6 @@ class BooksController:
             'image': book.image,
             'url': book.url,
             'isbn10': book.isbn10,
-            'prebooked_by_user_id': book.prebooked_by_user_id,
-            'finally_booked_by_user_id': book.finally_booked_by_user_id
         } }
 
 
@@ -97,21 +93,8 @@ class BooksController:
     def on_get_get_user_books(self, request: Request, response: Response):
         user_id = int(request.context.client.user_id)
         books = self.book_controller.get_user_books(user_id)
-        response.media = {f'user {request.context.client.user_id} books': [{
-            'book id': book.book_id,
-            'title': book.title,
-            'authors': book.authors,
-            'subtitle': book.subtitle,
-            'publisher': book.publisher,
-            'isbn13': book.isbn13,
-            'pages': book.pages,
-            'year': book.year,
-            'rating': book.rating,
-            'desc': book.desc,
-            'price': book.price,
-            'image': book.image,
-            'url': book.url,
-            'isbn10': book.isbn10,
+        response.media = {f'user {request.context.client.user_id} active books': [{
+            'book isbn': book.book_isbn
         } for book in books]}
 
 
@@ -127,3 +110,12 @@ class BooksController:
         request.media['user_id'] = request.context.client.user_id
         self.book_controller.buy_book(**request.media)
 
+
+    @authenticate
+    @join_point
+    def on_get_get_history_books(self, request: Request, response: Response):
+        user_id = int(request.context.client.user_id)
+        books = self.book_controller.get_history_user_books(user_id)
+        response.media = {f'user {request.context.client.user_id} took and returned next books': [{
+            'book isbn': book.book_isbn
+        } for book in books]}

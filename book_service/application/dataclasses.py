@@ -15,7 +15,7 @@ class Book:
     year: int
     rating: int
     desc: str
-    price: str
+    price: float
     image: str
     url: str
     isbn10: Optional[str] = None
