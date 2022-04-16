@@ -80,6 +80,7 @@ class BookService:
         return books
 
     @join_point
+    @validate_arguments
     def get_book(self, book_isbn: int):
         book = self.books_repo.get_by_isbn(book_isbn)
         if book is None or book_isbn != book.isbn13:
@@ -88,11 +89,13 @@ class BookService:
             return book
 
     @join_point
+    @validate_arguments
     def buy_book(self, book_isbn: int, user_id: int):
         book = self.books_repo.buy_book(book_isbn, user_id)
         return book
 
     @join_point
+    @validate_arguments
     def prebook_book(
         self, book_isbn: int, user_id: int, order_for_days: Optional[int] = 7
     ):
@@ -122,6 +125,7 @@ class BookService:
                 )
 
     @join_point
+    @validate_arguments
     def get_books_from_api(self, params: list):
         books = {}
         for param in params:
@@ -153,6 +157,7 @@ class BookService:
         return books
 
     @join_point
+    @validate_arguments
     def get_history_user_books(self, user_id: int):
         books = self.books_repo.get_history_user_books(user_id)
         return books
