@@ -76,3 +76,4 @@ class UsersService:
         for user in users:
             root.info(f"attention user {user.name},\n "
                       f"new books {data} arrived\n")
+        return data
