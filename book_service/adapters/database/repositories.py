@@ -1,4 +1,3 @@
-import datetime
 from typing import List, Optional
 
 from sqlalchemy import or_, select
@@ -45,16 +44,6 @@ class BooksRepo(BaseRepository, interfaces.BooksRepo):
                 book = new_book
         return book
 
-    # def take_book(self, book_id: int, user_id: int):
-    #     selected_book = self.get_by_id(book_id)
-    #     if selected_book is None:
-    #         raise errors.ErrorBook(message="not valid ID of book")
-    #     else:
-    #         if selected_book.user_id is None:
-    #             selected_book.user_id = user_id
-    #             return selected_book
-    #         else:
-    #             raise errors.ErrorBook(message="book already taken")
 
     def return_book(self, book_id: int, user_id: int):
         selected_book = self.session.query(UserBooks).where(
@@ -62,22 +51,6 @@ class BooksRepo(BaseRepository, interfaces.BooksRepo):
             UserBooks.returned == False
         ).one_or_none()
         return selected_book
-        # if selected_book is None:
-        #     raise errors.ErrorBook(message="Book not ordered by you")
-        # else:
-        #     return_days = (datetime.date.today() - selected_book.return_date)
-        #     selected_book.prebooked_by_user_id = None
-        #     selected_book.returned = True
-        #     message = ("book returned")
-        #
-        #     if return_days.days > 0:
-        #         selected_book.prebooked_by_user_id = None
-        #         selected_book.returned = True
-        #         message = (
-        #             f" user {user_id} please return book in time next time"
-        #         )
-        #         return message
-        #     return message
 
     def get_all(self):
         books = self.session.query(Book).order_by(Book.book_id).all()
@@ -105,16 +78,6 @@ class BooksRepo(BaseRepository, interfaces.BooksRepo):
 
     def buy_book(self, book_isbn, user_id):
         book = self.get_by_isbn_userbooks(book_isbn)
-        # if book is None:
-        #     raise errors.ErrorBook(message='Book not booked buy you')
-        # else:
-        #     if book.prebooked_by_user_id != user_id or book.finally_booked_by_user_id is not None:
-        #         raise errors.ErrorBook(message='Book bought by someone else')
-        #     else:
-        #         book.prebooked_by_user_id = None
-        #         book.finally_booked_by_user_id = user_id
-        #         book.booked_forever = True
-        #         book.return_date = datetime.date.today()
         return book
 
     def userbook_create(self, userbook: UserBooks):
