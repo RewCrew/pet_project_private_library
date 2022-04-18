@@ -60,8 +60,23 @@ class BookService:
     @join_point
     @validate_arguments
     def return_book(self, book_isbn: int, user_id: int):
-        book = self.books_repo.return_book(book_isbn, user_id)
-        return book
+        selected_book = self.books_repo.return_book(book_isbn, user_id)
+        if selected_book is None:
+            raise errors.ErrorBook(message="Book not ordered by you")
+        else:
+            return_days = (datetime.date.today() - selected_book.return_date)
+            selected_book.prebooked_by_user_id = None
+            selected_book.returned = True
+            message = ("book returned")
+
+            if return_days.days > 0:
+                selected_book.prebooked_by_user_id = None
+                selected_book.returned = True
+                message = (
+                    f" user {user_id} please return book in time next time"
+                )
+            return message
+
 
     @join_point
     def get_all(self):
@@ -92,6 +107,17 @@ class BookService:
     @validate_arguments
     def buy_book(self, book_isbn: int, user_id: int):
         book = self.books_repo.buy_book(book_isbn, user_id)
+        if book is None:
+            raise errors.ErrorBook(message='Book not booked buy you')
+        else:
+            if book.prebooked_by_user_id != user_id or book.finally_booked_by_user_id is not None:
+                raise errors.ErrorBook(message='Book bought by someone else')
+            else:
+                book.prebooked_by_user_id = None
+                book.finally_booked_by_user_id = user_id
+                book.booked_forever = True
+                book.return_date = datetime.date.today()
+                return book
         return book
 
     @join_point

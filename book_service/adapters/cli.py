@@ -12,7 +12,7 @@ def create_cli(MessageBus):
     @cli.command()
     @click.argument('params', nargs=-1, type=click.UNPROCESSED)
     def get_books(params: list):
-        click.echo('echo2')
+        # click.echo('echo2')
         click.echo(params)
         books = book_loader.get_books(params)
 
