@@ -12,18 +12,18 @@ from .join_points import join_point
 @component
 class Books:
     books: services.BookService
+    #
+    # @join_point
+    # def on_post_add_book(self, request: Request, response: Response):
+    #     self.books.add_book(**request.media)
+    #     response.media = {'message': 'book added'}
 
-    @join_point
-    def on_post_add_book(self, request: Request, response: Response):
-        self.books.add_book(**request.media)
-        response.media = {'message': 'book added'}
-
-    @authenticate
-    @join_point
-    def on_post_take_book(self, request: Request, response: Response):
-        request.media['user_id'] = request.context.client.user_id
-        self.books.take_book(**request.media)
-        response.media = {'message': 'book taken by you'}
+    # @authenticate
+    # @join_point
+    # def on_post_take_book(self, request: Request, response: Response):
+    #     request.media['user_id'] = request.context.client.user_id
+    #     self.books.take_book(**request.media)
+    #     response.media = {'message': 'book taken by you'}
 
     @authenticate
     @join_point
@@ -97,6 +97,7 @@ class Books:
     def on_post_prebook_book(self, request: Request, response: Response):
         request.media['user_id'] = request.context.client.user_id
         self.books.prebook_book(**request.media)
+        response.media = {'message': 'book taken by you'}
 
     @authenticate
     @join_point

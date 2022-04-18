@@ -7,7 +7,7 @@ from evraz.classic.components import component
 from evraz.classic.sql_storage import BaseRepository
 
 from book_service.adapters.database import tables
-from book_service.application import errors, interfaces
+from book_service.application import interfaces
 from book_service.application.dataclasses import Book, UserBooks
 
 
@@ -120,6 +120,7 @@ class BooksRepo(BaseRepository, interfaces.BooksRepo):
     def userbook_create(self, userbook: UserBooks):
         self.session.add(userbook)
         self.session.flush()
+
 
     def get_by_filter(self, filter_data: dict) -> Optional[List[Book]]:
         query = self.session.query(tables.books)
