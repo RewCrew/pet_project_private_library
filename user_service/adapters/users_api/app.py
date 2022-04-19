@@ -6,8 +6,8 @@ from user_service.application import services
 
 
 def create_app(
-        is_dev_mode: bool,
-        register: services.UsersService,
+    is_dev_mode: bool,
+    register: services.UsersService,
 ) -> App:
     authenticator = Authenticator(app_groups=auth.ALL_GROUPS)
 
@@ -20,4 +20,3 @@ def create_app(
 
     app.register(controllers.Users(users=register, authenticator=authenticator))
     return app
-

@@ -1,4 +1,3 @@
-
 from typing import Optional
 
 import jwt
@@ -12,7 +11,6 @@ from user_service.application import interfaces, errors
 from user_service.application.dataclasses import User
 from evraz.classic.messaging import Message
 
-
 import logging
 import sys
 
@@ -21,11 +19,11 @@ root.setLevel(logging.INFO)
 
 handler = logging.StreamHandler(sys.stdout)
 handler.setLevel(logging.INFO)
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+formatter = logging.Formatter(
+    '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 handler.setFormatter(formatter)
 root.addHandler(handler)
-
-
 
 join_points = PointCut()
 join_point = join_points.join_point
@@ -53,14 +51,17 @@ class UsersService:
         user = self.user_repo.get_or_create(new_user)
 
         token = jwt.encode(
-            {"sub": user.id,
-             "name": user.name,
-             "email": user.email,
-             "login": user.name,
-             "group": "User"}
-            , 'kerim_project', algorithm='HS256')
+            {
+                "sub": user.id,
+                "name": user.name,
+                "email": user.email,
+                "login": user.name,
+                "group": "User"
+            },
+            'kerim_project',
+            algorithm='HS256'
+        )
         return token
-
 
     @join_point
     def get_user(self, id: int):
@@ -71,9 +72,11 @@ class UsersService:
             return user
 
     @join_point
-    def message_sender(self, data:dict):
+    def message_sender(self, data: dict):
         users = self.user_repo.get_all()
         for user in users:
-            root.info(f"attention user {user.name},\n "
-                      f"new books {data} arrived\n")
+            root.info(
+                f"attention user {user.name},\n "
+                f"new books {data} arrived\n"
+            )
         return data

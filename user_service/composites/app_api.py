@@ -6,6 +6,7 @@ from evraz.classic.sql_storage import TransactionContext
 from user_service.adapters import database, users_api, message_bus
 from user_service.application import services
 
+
 class Settings:
     db = database.Settings()
     chat_api = users_api.Settings()
@@ -21,10 +22,10 @@ class DB:
     users_repo = database.repositories.UsersRepo(context=context)
 
 
-
 class Application:
     register = services.UsersService(user_repo=DB.users_repo)
     is_dev_mode = Settings.chat_api.IS_DEV_MODE
+
 
 class ConsumerMessageBus:
     connection = Connection(Settings.message_bus.BROKER_URL)
@@ -34,14 +35,14 @@ class ConsumerMessageBus:
     def declare_scheme():
         message_bus.broker_scheme.declare(ConsumerMessageBus.connection)
 
+
 class Aspects:
     services.join_points.join(DB.context)
     users_api.join_points.join(DB.context)
 
 
 app = users_api.create_app(
-    register=Application.register,
-    is_dev_mode=Application.is_dev_mode
+    register=Application.register, is_dev_mode=Application.is_dev_mode
 )
 
 if __name__ == "__main__":

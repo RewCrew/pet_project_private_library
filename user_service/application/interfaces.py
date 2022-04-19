@@ -4,6 +4,7 @@ from user_service.application.dataclasses import User
 
 
 class UsersRepo(ABC):
+
     @abstractmethod
     def add(self, user: User):
         pass
@@ -19,4 +20,3 @@ class UsersRepo(ABC):
     @abstractmethod
     def get_all(self):
         pass
-

@@ -1,11 +1,11 @@
 from pydantic import BaseSettings
 import os
 
-user = os.getenv('USER', 'superuser')
+user = os.getenv('USER', 'postgres')
 password = os.getenv('PASSWORD', 'password')
 host = os.getenv('HOST', 'localhost')
 port = os.getenv('PORT', '5432')
-database = os.getenv('DATABASE', 'users')
+database = os.getenv('DATABASE', 'evraz_project')
 
 
 class Settings(BaseSettings):

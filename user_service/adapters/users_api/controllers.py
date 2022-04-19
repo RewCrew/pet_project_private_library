@@ -6,7 +6,6 @@ from falcon import Request, Response
 
 from evraz.classic.http_auth import (
     authenticator_needed,
-
 )
 
 
@@ -19,5 +18,3 @@ class Users:
     def on_post_register(self, request: Request, response: Response):
         token = self.users.add_user(**request.media)
         response.media = {"Token": token}
-
-

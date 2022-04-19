@@ -1,11 +1,5 @@
 from sqlalchemy import (
-    Column,
-    ForeignKey,
-    Integer,
-    MetaData,
-    String,
-    Table,
-    DateTime,
+    Column, ForeignKey, Integer, MetaData, String, Table, DateTime,
     UniqueConstraint
 )
 
@@ -20,8 +14,7 @@ naming_convention = {
 metadata = MetaData(naming_convention=naming_convention)
 
 users = Table(
-    'users',
-    metadata,
+    'users', metadata,
     Column('id', Integer, primary_key=True, autoincrement=True),
     Column('name', String, nullable=False),
     Column('email', String, nullable=True)

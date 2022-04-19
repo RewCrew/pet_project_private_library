@@ -11,6 +11,7 @@ from user_service.application.dataclasses import User
 
 @component
 class UsersRepo(BaseRepository, interfaces.UsersRepo):
+
     def add(self, user: User):
         self.session.add(user)
         self.session.flush()
@@ -32,23 +33,6 @@ class UsersRepo(BaseRepository, interfaces.UsersRepo):
                 user = new_user
         return user
 
-    # def delete(self, user_id: int):
-    #     query = delete(User).where(User.id == user_id)
-    #     self.session.execute(query)
-    #     self.session.flush()
-    #
     def get_all(self):
         users = self.session.query(User).order_by(User.id).all()
         return users
-
-    # def update(self, user: UserUpdate):
-    #     user_query = self.session.query(User).filter_by(user_id=user.id).one_or_none()
-    #     if not user_query:
-    #         raise errors.ErrorUser(message="no user founded")
-    #     if user.name is not None:
-    #         user_query.name = user.name
-    #     if user.email is not None:
-    #         user_query.email = user.email
-    #     self.session.flush()
-    #     self.session.commit()
-    #     return user_query
