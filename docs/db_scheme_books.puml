@@ -1,0 +1,45 @@
+@startuml
+header  Final_project
+title BD scheme (Books)
+
+hide circle
+
+
+
+
+
+entity book {
+  * **book_id**  :  int
+  __
+    title: varchar
+    subtitle: varchar
+    authors: varchar
+    publisher: varchar
+    isbn10: varchar
+    isbn13: int
+    pages: int
+    year: int
+    rating: int
+    desc: varchar
+    price: int
+    image: varchar
+    url: varchar
+    desc: varchar
+}
+
+
+entity userbooks {
+  * **id**  :  int
+  __
+    book_isbn: int
+    prebooked_by_user_id: int
+    finally_booked_by_user_id: int
+    booked_date: datetime
+    order_for_days: int
+    returned: bool
+    return_date: datetime
+    booked_forever: bool
+    user_id_history: int
+}
+
+@enduml

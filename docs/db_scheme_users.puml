@@ -1,0 +1,16 @@
+@startuml
+header  Final_project
+title BD scheme (Users)
+
+hide circle
+
+entity user {
+  * **id**  :  int
+  __
+    name  :  varchar
+    email : varchar
+
+}
+
+
+@enduml
