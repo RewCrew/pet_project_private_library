@@ -43,3 +43,8 @@ def test_buy_book(fill_db, userbooks_buy, books_repo, session):
     books_repo.buy_book(book_isbn = 123456781234, user_id =1)
     result = session.execute(tables.userbooks.select()).all()
     assert len(result)==1
+
+def test_get_by_isbn_userbooks(books_repo, fill_db, userbooks):
+    result = books_repo.get_by_isbn_userbooks(isbn=123456781234)
+    assert result == userbooks
+

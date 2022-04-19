@@ -104,6 +104,7 @@ class Books:
     def on_post_buy_book(self, request: Request, response: Response):
         request.media['user_id'] = request.context.client.user_id
         self.books.buy_book(**request.media)
+        response.media = {'message': 'you finally bought this book'}
 
     @authenticate
     @join_point
