@@ -93,7 +93,8 @@ def test_get_history_books(books_service, client, userbooks_find):
                 [{'book isbn': 123456781234}]
     }
 
-    result = client.simulate_get('/api/books/get_history_books', content_type = falcon.MEDIA_JSON)
+    result = client.simulate_get('/api/books/get_history_books', content_type=falcon.MEDIA_JSON)
 
     assert result.status_code == 200
     assert result.json == expected
+

@@ -121,8 +121,8 @@ def test_prebook_book(book_test):
 
 def test_return_book(book_test):
     book = book_test.return_book(book_isbn=123456781234, user_id=1)
-    print(asdict(book))
-    assert asdict(book) == test_data_userbooks_returned
+
+    assert book == 'book returned'
 
 def test_wrong_prebook_book(book_test):
     book_test.books_repo.get_by_isbn.return_value = None
