@@ -1,5 +1,6 @@
-from pydantic import BaseSettings
 import os
+
+from pydantic import BaseSettings
 
 user = os.getenv('USER', 'postgres')
 password = os.getenv('PASSWORD', 'password')

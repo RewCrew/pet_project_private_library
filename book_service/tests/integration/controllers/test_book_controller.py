@@ -1,4 +1,5 @@
 import falcon
+
 from book_service.application import errors
 
 

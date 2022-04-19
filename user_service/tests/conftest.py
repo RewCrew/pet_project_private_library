@@ -1,7 +1,8 @@
-import pytest
 from unittest.mock import Mock
 
-from user_service.application import interfaces, dataclasses
+import pytest
+
+from user_service.application import dataclasses, interfaces
 
 
 @pytest.fixture(scope='function')

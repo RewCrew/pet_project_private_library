@@ -3,7 +3,7 @@ from sqlalchemy import create_engine
 
 from evraz.classic.sql_storage import TransactionContext
 
-from user_service.adapters import database, users_api, message_bus
+from user_service.adapters import database, message_bus, users_api
 from user_service.application import services
 
 

@@ -1,6 +1,7 @@
 import pytest
 from attr import asdict
-from user_service.application import services, errors
+
+from user_service.application import errors, services
 
 
 @pytest.fixture(scope='function')

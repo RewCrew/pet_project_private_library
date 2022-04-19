@@ -1,8 +1,9 @@
 import pytest
 from sqlalchemy import create_engine
-from book_service.adapters.database import Settings
+
 from evraz.classic.sql_storage import TransactionContext
 
+from book_service.adapters.database import Settings
 from book_service.adapters.database.tables import metadata
 
 

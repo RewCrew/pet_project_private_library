@@ -1,12 +1,10 @@
-from user_service.application import services
-from evraz.classic.components import component
-
-from user_service.adapters.users_api.join_points import join_point
 from falcon import Request, Response
 
-from evraz.classic.http_auth import (
-    authenticator_needed,
-)
+from evraz.classic.components import component
+from evraz.classic.http_auth import authenticator_needed
+
+from user_service.adapters.users_api.join_points import join_point
+from user_service.application import services
 
 
 @authenticator_needed

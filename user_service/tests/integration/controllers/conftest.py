@@ -1,9 +1,9 @@
 from unittest.mock import Mock
 
 import pytest
+from falcon import testing
 
 from user_service.adapters import users_api
-from falcon import testing
 from user_service.application import services
 
 

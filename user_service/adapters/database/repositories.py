@@ -1,6 +1,6 @@
 from typing import Optional
 
-from sqlalchemy import select, delete
+from sqlalchemy import delete, select
 
 from evraz.classic.components import component
 from evraz.classic.sql_storage import BaseRepository
