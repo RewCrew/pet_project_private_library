@@ -19,8 +19,6 @@ class Book:
     image: str
     url: str
     isbn10: Optional[str] = None
-    # prebooked_by_user_id : Optional[int]=None
-    # finally_booked_by_user_id: Optional[int] = None
     book_id: Optional[int] = None
 
 

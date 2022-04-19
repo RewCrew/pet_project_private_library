@@ -1,12 +1,9 @@
 from sqlalchemy import (
     Column,
-    DateTime,
-    ForeignKey,
     Integer,
     MetaData,
     String,
     Table,
-    UniqueConstraint,
 )
 
 naming_convention = {

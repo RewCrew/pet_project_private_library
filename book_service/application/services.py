@@ -5,7 +5,7 @@ from typing import Optional
 import requests
 from pydantic import validate_arguments
 
-from evraz.classic.app import DTO, validate_with_dto
+from evraz.classic.app import DTO
 from evraz.classic.aspects import PointCut
 from evraz.classic.components import component
 from evraz.classic.messaging import Message, Publisher
