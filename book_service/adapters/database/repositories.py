@@ -44,7 +44,6 @@ class BooksRepo(BaseRepository, interfaces.BooksRepo):
                 book = new_book
         return book
 
-
     def return_book(self, book_id: int, user_id: int):
         selected_book = self.session.query(UserBooks).where(
             UserBooks.prebooked_by_user_id == user_id,
@@ -83,7 +82,6 @@ class BooksRepo(BaseRepository, interfaces.BooksRepo):
     def userbook_create(self, userbook: UserBooks):
         self.session.add(userbook)
         self.session.flush()
-
 
     def get_by_filter(self, filter_data: dict) -> Optional[List[Book]]:
         query = self.session.query(tables.books)

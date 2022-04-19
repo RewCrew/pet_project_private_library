@@ -77,7 +77,6 @@ class BookService:
                 )
             return message
 
-
     @join_point
     def get_all(self):
         books = self.books_repo.get_all()

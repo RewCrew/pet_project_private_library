@@ -1,5 +1,3 @@
-
-
 import pytest
 from attr import asdict
 
@@ -13,6 +11,7 @@ def fill_db(session, book, book2, userbooks):
     userbook_take = [asdict(userbooks)]
     session.execute(tables.books.insert(), books_data)
     session.execute(tables.userbooks.insert(), userbook_take)
+
 
 @pytest.fixture(scope='function')
 def books_repo(transaction_context):
@@ -39,12 +38,12 @@ def test_prebook_book(books_repo, userbooks, session):
 
 def test_buy_book(fill_db, userbooks_buy, books_repo, session):
     initial_result = session.execute(tables.userbooks.select()).all()
-    assert  len(initial_result)==1
-    books_repo.buy_book(book_isbn = 123456781234, user_id =1)
+    assert len(initial_result) == 1
+    books_repo.buy_book(book_isbn=123456781234, user_id=1)
     result = session.execute(tables.userbooks.select()).all()
-    assert len(result)==1
+    assert len(result) == 1
+
 
 def test_get_by_isbn_userbooks(books_repo, fill_db, userbooks):
     result = books_repo.get_by_isbn_userbooks(isbn=123456781234)
     assert result == userbooks
-

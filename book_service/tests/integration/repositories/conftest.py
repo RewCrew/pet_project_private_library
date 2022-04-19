@@ -6,7 +6,6 @@ from evraz.classic.sql_storage import TransactionContext
 from book_service.adapters.database.tables import metadata
 
 
-
 @pytest.fixture(scope='session')
 def engine():
     engine = create_engine(Settings().DB_URL)

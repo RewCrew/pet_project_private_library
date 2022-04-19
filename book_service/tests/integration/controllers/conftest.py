@@ -14,12 +14,8 @@ def books_service():
     return service
 
 
-
-
 @pytest.fixture(scope='function')
-def client(
-    books_service
-):
+def client(books_service):
     app = books_api.create_app(
         is_dev_mode=True,
         books=books_service,
