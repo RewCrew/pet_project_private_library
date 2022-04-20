@@ -1,5 +1,6 @@
 import falcon
 import jwt
+import pytest
 
 
 def test_register_user(users_service, client, user):
@@ -32,3 +33,7 @@ def test_register_user(users_service, client, user):
     )
     assert result.status_code == 200
     assert result.json == expected
+
+
+if __name__ == '__main__':
+    pytest.main()

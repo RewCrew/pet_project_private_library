@@ -156,3 +156,7 @@ def test_message_sender(user_test):
 def test_wrong_message_sender(user_test):
     message = user_test.message_sender(wrong_test_data)
     assert message != test_data
+
+
+if __name__ == '__main__':
+    pytest.main()

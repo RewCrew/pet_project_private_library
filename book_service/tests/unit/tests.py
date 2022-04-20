@@ -143,3 +143,7 @@ def test_get_book_wrong_args(book_test):
 def test_add_book_wrong_args(book_test):
     with pytest.raises(ValidationError):
         book_test.add_book(user_id=1)
+
+
+if __name__ == '__main__':
+    pytest.main()

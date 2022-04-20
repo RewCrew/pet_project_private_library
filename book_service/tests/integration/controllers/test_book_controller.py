@@ -1,4 +1,5 @@
 import falcon
+import pytest
 
 from book_service.application import errors
 
@@ -131,3 +132,7 @@ def test_get_history_books(books_service, client, userbooks_find):
 
     assert result.status_code == 200
     assert result.json == expected
+
+
+if __name__ == '__main__':
+    pytest.main()

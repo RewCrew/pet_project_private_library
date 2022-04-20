@@ -29,3 +29,7 @@ def test_get_by_id(users_repo, fill_db, user):
 def test_get_all(users_repo, user, user2, fill_db):
     result = users_repo.get_all()
     assert result == [user, user2]
+
+
+if __name__ == '__main__':
+    pytest.main()
