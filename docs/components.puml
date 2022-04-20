@@ -1,0 +1,63 @@
+@startuml
+header  Final_project
+title Components DIAG
+
+rectangle "Proxy" {
+  [Nginx] as nginx
+}
+
+rectangle "Interfaces Books (Driving)" {
+  [Books API] as books_api
+  [Rabbitmq consumer] as rabbitmq_consumer_books
+}
+
+rectangle "Book application" {
+  [Book] as book
+  interface "Book repo" as book_repo
+  interface "Book publisher" as book_publisher
+
+}
+
+rectangle "Books Adapters (Driven)" {
+  [Database] as database_books
+  [Publisher] as publisher
+
+}
+
+
+() "AMQP" as amqp
+() "HTTP API" as http_api
+
+rabbitmq_consumer_books -u-( amqp
+nginx -u-( http_api
+books_api -u--( nginx
+books_api ..> book
+rabbitmq_consumer_books ..> book
+book --( book_repo
+book --( book_publisher
+publisher -u- book_publisher
+database_books -u- book_repo
+
+
+
+rectangle "Interfaces Users (Driving)" {
+  [Users API] as users_api
+  [Rabbitmq consumer] as rabbitmq_consumer_users
+}
+
+rectangle "User application" {
+  [User] as user
+  interface "User repo" as user_repo
+}
+
+rectangle "Users Adapters (Driven)" {
+  [Database] as database_user
+
+rabbitmq_consumer_users-u-( amqp
+users_api -u-( nginx
+users_api ..> user
+rabbitmq_consumer_users ..> user
+user --( user_repo
+database_user -u- user_repo
+
+@enduml
