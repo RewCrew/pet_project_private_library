@@ -2,11 +2,13 @@
 header  Final_project
 title Components DIAG
 
+skinparam linetype ortho
+
 rectangle "Proxy" {
   [Nginx] as nginx
 }
 
-rectangle "Interfaces Books (Driving)" {
+rectangle "Interfaces Books (Primary/Driving)" {
   [Books API] as books_api
   [Rabbitmq consumer] as rabbitmq_consumer_books
 }
@@ -18,7 +20,7 @@ rectangle "Book application" {
 
 }
 
-rectangle "Books Adapters (Driven)" {
+rectangle "Books Adapters (Secondary/Driven)" {
   [Database] as database_books
   [Publisher] as publisher
 
@@ -28,9 +30,9 @@ rectangle "Books Adapters (Driven)" {
 () "AMQP" as amqp
 () "HTTP API" as http_api
 
-rabbitmq_consumer_books -u-( amqp
+rabbitmq_consumer_books -d-( amqp
 nginx -u-( http_api
-books_api -u--( nginx
+books_api -u-( nginx
 books_api ..> book
 rabbitmq_consumer_books ..> book
 book --( book_repo
@@ -40,7 +42,7 @@ database_books -u- book_repo
 
 
 
-rectangle "Interfaces Users (Driving)" {
+rectangle "Interfaces Users (Primary/Driving)" {
   [Users API] as users_api
   [Rabbitmq consumer] as rabbitmq_consumer_users
 }
@@ -50,7 +52,7 @@ rectangle "User application" {
   interface "User repo" as user_repo
 }
 
-rectangle "Users Adapters (Driven)" {
+rectangle "Users Adapters (Secondary/Driven)" {
   [Database] as database_user
 
 rabbitmq_consumer_users-u-( amqp
