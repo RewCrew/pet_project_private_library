@@ -1,4 +1,4 @@
-from evraz.classic.app.errors import AppError
+from classic.app.errors import AppError
 
 
 class ErrorBook(AppError):

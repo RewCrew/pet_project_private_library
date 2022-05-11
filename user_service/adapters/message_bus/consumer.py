@@ -1,6 +1,6 @@
 from kombu import Connection
 
-from evraz.classic.messaging_kombu import KombuConsumer
+from classic.messaging_kombu import KombuConsumer
 
 from user_service.application import services
 

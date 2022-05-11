@@ -1,7 +1,7 @@
 from falcon import Request, Response
 
-from evraz.classic.components import component
-from evraz.classic.http_auth import authenticator_needed
+from classic.components import component
+from classic.http_auth import authenticator_needed
 
 from user_service.adapters.users_api.join_points import join_point
 from user_service.application import services

@@ -5,10 +5,10 @@ from typing import Optional
 import requests
 from pydantic import validate_arguments
 
-from evraz.classic.app import DTO
-from evraz.classic.aspects import PointCut
-from evraz.classic.components import component
-from evraz.classic.messaging import Message, Publisher
+from classic.app import DTO
+from classic.aspects import PointCut
+from classic.components import component
+from classic.messaging import Message, Publisher
 
 from book_service.application import errors
 
@@ -52,6 +52,7 @@ class BookService:
     @join_point
     @validate_arguments
     def add_book(self, data: dict):
+        print(data)
         book_info = BookInfo(**data)
         new_book = book_info.create_obj(Book)
         book = self.books_repo.get_or_create(new_book)
@@ -175,6 +176,7 @@ class BookService:
                     self.publisher.publish(
                         Message("Exchange", {'data': result})
                     )
+
         for k, v in books.items():
             filter = sorted(v, key=lambda x: (-int(x['rating']), x['year']))
             books[k] = filter[:3]

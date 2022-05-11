@@ -7,9 +7,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.isort]
 profile = "black"
-known_first_party = "final_project_evraz"
-known_evraz = "evraz"
-sections=["FUTURE", "STDLIB", "THIRDPARTY", "EVRAZ", "FIRSTPARTY", "LOCALFOLDER"]
+sections=["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
 line_length = 80
 
 [tool.yapf]

@@ -1,7 +1,7 @@
 from falcon import Request, Response
 
-from evraz.classic.components import component
-from evraz.classic.http_auth import authenticate, authenticator_needed
+from classic.components import component
+from classic.http_auth import authenticate, authenticator_needed
 
 from book_service.application import services
 

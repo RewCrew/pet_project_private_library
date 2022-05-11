@@ -1,7 +1,7 @@
 import falcon
 
-from evraz.classic.http_api import App
-from evraz.classic.http_auth import Authenticator
+from classic.http_api import App
+from classic.http_auth import Authenticator
 
 from user_service.application import services
 

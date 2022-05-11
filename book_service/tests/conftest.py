@@ -3,7 +3,7 @@ from unittest.mock import Mock
 
 import pytest
 
-from evraz.classic.messaging import Publisher
+from classic.messaging import Publisher
 
 from book_service.application import dataclasses, interfaces
 
@@ -133,5 +133,5 @@ def books_repo(
 @pytest.fixture(scope='function')
 def book_publisher():
     book_publisher = Mock(Publisher)
-    book_publisher.plan = Mock(return_value=None)
+    book_publisher.publish = Mock(return_value=None)
     return book_publisher

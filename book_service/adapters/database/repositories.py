@@ -2,8 +2,8 @@ from typing import List, Optional
 
 from sqlalchemy import or_, select
 
-from evraz.classic.components import component
-from evraz.classic.sql_storage import BaseRepository
+from classic.components import component
+from classic.sql_storage import BaseRepository
 
 from book_service.adapters.database import tables
 from book_service.application import interfaces

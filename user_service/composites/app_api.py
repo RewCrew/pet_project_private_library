@@ -1,7 +1,7 @@
 from kombu import Connection
 from sqlalchemy import create_engine
 
-from evraz.classic.sql_storage import TransactionContext
+from classic.sql_storage import TransactionContext
 
 from user_service.adapters import database, message_bus, users_api
 from user_service.application import services

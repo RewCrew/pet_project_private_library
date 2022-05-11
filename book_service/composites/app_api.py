@@ -1,8 +1,8 @@
 from kombu import Connection
 from sqlalchemy import create_engine
 
-from evraz.classic.messaging_kombu import KombuPublisher
-from evraz.classic.sql_storage import TransactionContext
+from classic.messaging_kombu import KombuPublisher
+from classic.sql_storage import TransactionContext
 
 from book_service.adapters import books_api, database, message_bus
 from book_service.application import services

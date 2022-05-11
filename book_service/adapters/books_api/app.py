@@ -1,5 +1,5 @@
-from evraz.classic.http_api import App
-from evraz.classic.http_auth import Authenticator
+from classic.http_api import App
+from classic.http_auth import Authenticator
 
 from book_service.adapters.books_api import auth, controllers
 from book_service.application import services

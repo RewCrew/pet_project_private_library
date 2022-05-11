@@ -6,7 +6,7 @@ user = os.getenv('USER', 'postgres')
 password = os.getenv('PASSWORD', 'password')
 host = os.getenv('HOST', 'localhost')
 port = os.getenv('PORT', '5432')
-database = os.getenv('DATABASE', 'evraz_project')
+database = os.getenv('DATABASE', 'pet_project')
 
 
 class Settings(BaseSettings):

@@ -26,7 +26,7 @@ services:
       HOST: postgresdb
       USER: postgres
       PASSWORD: password
-      DATABASE: evraz_project
+      DATABASE: pet_project
     volumes:
       - ./user_service:/app/user_service
     depends_on:
@@ -37,8 +37,6 @@ services:
 
   books_service:
     build: ./book_service
-    #      context: ./book_service
-    #      dockerfile: Dockerfile
     ports:
       - "1235:1235"
     environment:
@@ -49,7 +47,7 @@ services:
       HOST: postgresdb
       USER: postgres
       PASSWORD: password
-      DATABASE: evraz_project
+      DATABASE: pet_project
     volumes:
       - ./book_service:/app/book_service
     depends_on:
@@ -70,7 +68,7 @@ services:
       HOST: postgresdb
       USER: postgres
       PASSWORD: password
-      DATABASE: evraz_project
+      DATABASE: pet_project
     volumes:
       - ./user_service:/app/user_service
     depends_on:
@@ -94,7 +92,7 @@ services:
       HOST: postgresdb
       USER: postgres
       PASSWORD: password
-      DATABASE: evraz_project
+      DATABASE: pet_project
     volumes:
       - ./book_service:/app/book_service
     #    depends_on:
@@ -104,48 +102,7 @@ services:
     command:
       "entrypoint_consumer.sh"
 
-#  books_service_cli:
-#    build: ./book_service
-#    #    ports:
-#    #      - "1235:1235"
-#    environment:
-#      RABBITMQ_HOST: rabbitmq
-#      RABBITMQ_USER: superuser
-#      RABBITMQ_PASS: password
-#      RABBITMQ_PORT: 5672
-#      HOST: postgresdb
-#      USER: postgres
-#      PASSWORD: password
-#      DATABASE: evraz_project
-#    volumes:
-#      - ./book_service:/app/book_service
-#    #    depends_on:
-#    #      - postgresdb
-#    #      - rabbitmq
-#    restart: on-failure
-#    command:
-#      "entrypoint_cli.sh"
 
-
-  #  issues_service:
-  #    build:
-  #      context: ./issues_service
-  #      dockerfile: Dockerfile
-  #    ports:
-  #      - "1236:1236"
-  #    environment:
-  #       RABBITMQ_HOST: rabbitmq
-  #       RABBITMQ_USER: superuser
-  #       RABBITMQ_PASS: password
-  #       RABBITMQ_PORT: 5672
-  #       HOST: postgresdb
-  #       USER: postgres
-  #       PASSWORD: password
-  #       DATABASE: evraz_project_issues_service
-  #    depends_on:
-  #      - postgresdb
-  #      - rabbitmq
-  #    restart: unless-stopped
 
   rabbitmq:
     image: rabbitmq:3-management

@@ -5,8 +5,8 @@ WORKDIR /app
 ENV PATH=$PATH:/usr/bin
 
 RUN pip install --upgrade pip
-COPY ./dist ./dist
-RUN pip install ./dist/*tar.gz
+#COPY ./dist ./dist
+#RUN pip install ./dist/*tar.gz
 
 COPY ./setup.cfg .
 COPY ./setup.py .

@@ -2,8 +2,8 @@ from typing import Optional
 
 from sqlalchemy import select
 
-from evraz.classic.components import component
-from evraz.classic.sql_storage import BaseRepository
+from classic.components import component
+from classic.sql_storage import BaseRepository
 
 from user_service.application import interfaces
 from user_service.application.dataclasses import User
